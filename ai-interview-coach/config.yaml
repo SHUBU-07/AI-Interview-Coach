@@ -1,0 +1,69 @@
+project:
+  name: "AI Interview Coach"
+  version: "1.1.0"
+  description: "Rubric-anchored, human-validated, and fairness-audited interview answer evaluation system"
+
+llm:
+  # Supported backends: 'ollama' (local, default), 'openai_compatible' (API), 'mock' (tests/demo ONLY).
+  # An unknown value raises an error; the system never silently falls back to the mock.
+  backend: "ollama"
+  model: "llama3"
+  temperature: 0.0
+  max_retries: 2
+  timeout_seconds: 60
+  log_inferences: true
+
+  ollama_base_url: "http://localhost:11434"
+  api_base_url: "http://localhost:8000/v1"
+  api_key_env: "LLM_API_KEY"
+
+asr:
+  model_size: "base"
+  device: "cpu"
+  compute_type: "int8"
+  vad_filter: false
+
+scoring:
+  # The Delivery dimension needs acoustic features AND raters who can hear the audio.
+  # Keep it off unless you collect human delivery ratings and validate it (see README).
+  include_delivery: false  # NOT VALIDATED: S1 only sees the transcript, so delivery would be guessed from text
+
+study:
+  # If false, spoken answers are scored on the raw ASR transcript. Needed for a clean ASR/accent audit.
+  allow_transcript_editing: false
+
+privacy:
+  # Audio is only needed to create manually corrected reference transcripts for the WER audit.
+  # Set to false to delete audio right after transcription.
+  keep_audio: true
+  audio_dir: "data/audio"
+
+baselines:
+  embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+  tfidf_max_features: 1000
+
+ensemble:
+  # S2 only differs from S1 if temperature > 0 or you supply >= 2 different models.
+  num_runs: 3
+  aggregation: "mean"  # 'mean' or 'median'
+
+eval:
+  bootstrap_resamples: 1000
+  random_seed: 42
+  confidence_level: 0.95
+  non_inferiority_margin: 0.10   # pre-register this before collecting data
+  min_group_size_for_inference: 10
+  min_raters_per_answer: 2
+  min_answers_for_inference: 10
+
+paths:
+  rubric: "rubric.yaml"
+  database: "data/interview_coach.db"
+  questions_csv: "data/questions.csv"
+  answers_csv: "data/answers.csv"
+  human_ratings_csv: "data/human_ratings.csv"
+  merged_dataset_csv: "data/merged_dataset.csv"
+  transcription_subset_csv: "data/transcription_subset.csv"
+  eval_output_dir: "eval/outputs"
+  logs_dir: "data/inference_logs"
+  demo_dir: "data/demo"

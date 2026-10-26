@@ -1,0 +1,22 @@
+# DEMO ONLY: synthetic data written to test that the pipeline runs. Not real participants, not evidence.
+rating_id,rater_id,answer_id,relevance_correctness,depth_completeness,structure_clarity,language_use,delivery,overall_score,evidence_notes
+HR_D01_DEMO_RATER_A,DEMO_RATER_A,D01,5,4,5,5,,4.75,synthetic demo rating
+HR_D02_DEMO_RATER_A,DEMO_RATER_A,D02,1,1,1,3,,1.5,synthetic demo rating
+HR_D03_DEMO_RATER_A,DEMO_RATER_A,D03,4,4,5,4,,4.25,synthetic demo rating
+HR_D04_DEMO_RATER_A,DEMO_RATER_A,D04,1,1,1,2,,1.25,synthetic demo rating
+HR_D05_DEMO_RATER_A,DEMO_RATER_A,D05,4,3,3,4,,3.5,synthetic demo rating
+HR_D06_DEMO_RATER_A,DEMO_RATER_A,D06,5,4,4,4,,4.25,synthetic demo rating
+HR_D07_DEMO_RATER_A,DEMO_RATER_A,D07,3,2,3,3,,2.75,synthetic demo rating
+HR_D08_DEMO_RATER_A,DEMO_RATER_A,D08,2,1,2,3,,2.0,synthetic demo rating
+HR_D09_DEMO_RATER_A,DEMO_RATER_A,D09,4,4,4,5,,4.25,synthetic demo rating
+HR_D10_DEMO_RATER_A,DEMO_RATER_A,D10,3,2,3,4,,3.0,synthetic demo rating
+HR_D01_DEMO_RATER_B,DEMO_RATER_B,D01,5,4,4,5,,4.5,synthetic demo rating
+HR_D02_DEMO_RATER_B,DEMO_RATER_B,D02,1,1,2,3,,1.75,synthetic demo rating
+HR_D03_DEMO_RATER_B,DEMO_RATER_B,D03,4,3,5,4,,4.0,synthetic demo rating
+HR_D04_DEMO_RATER_B,DEMO_RATER_B,D04,2,1,1,2,,1.5,synthetic demo rating
+HR_D05_DEMO_RATER_B,DEMO_RATER_B,D05,3,3,3,4,,3.25,synthetic demo rating
+HR_D06_DEMO_RATER_B,DEMO_RATER_B,D06,4,4,4,4,,4.0,synthetic demo rating
+HR_D07_DEMO_RATER_B,DEMO_RATER_B,D07,3,2,2,3,,2.5,synthetic demo rating
+HR_D08_DEMO_RATER_B,DEMO_RATER_B,D08,2,1,2,2,,1.75,synthetic demo rating
+HR_D09_DEMO_RATER_B,DEMO_RATER_B,D09,5,4,4,4,,4.25,synthetic demo rating
+HR_D10_DEMO_RATER_B,DEMO_RATER_B,D10,3,3,3,4,,3.25,synthetic demo rating

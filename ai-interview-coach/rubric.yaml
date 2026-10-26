@@ -1,0 +1,108 @@
+version: "1.0"
+description: "Rubric-anchored scoring guidelines for spoken and typed interview responses"
+dimensions:
+  relevance_correctness:
+    name: "Relevance and Correctness"
+    description: "Evaluates how directly, accurately, and thoroughly the candidate addresses the core question and any explicit sub-prompts without deflecting or introducing factually incorrect premises."
+    anchors:
+      1: "Deflects or fails to answer the question asked. Tangential or contradictory content; contains severe domain misunderstandings or answers an entirely different prompt."
+      2: "Minimally addresses the prompt. Touches on the topic superficially but misses key constraints or premises; significant off-topic drift."
+      3: "Adequately answers the core question. Understands constraints, addresses the main prompt directly, though may omit minor secondary nuances or take slight diversions."
+      4: "Direct, precise, and accurate answer. Directly addresses both primary and secondary elements of the prompt with sound domain principles."
+      5: "Directly, accurately, and insightfully addresses every aspect of the question. Contextualizes the answer with strong technical/domain veracity and zero evasion."
+    training_examples:
+      - question: "Explain the difference between optimistic and pessimistic concurrency control."
+        answer_excerpt: "Concurrency is very important in modern software. I usually use Docker and Kubernetes to scale microservices across cloud regions so transactions don't fail."
+        score: 1
+        evidence_quote: "I usually use Docker and Kubernetes to scale microservices"
+        rationale: "Deflects completely from concurrency control algorithms to container orchestration. Demonstrates total lack of relevance to database locking mechanics."
+      - question: "Explain the difference between optimistic and pessimistic concurrency control."
+        answer_excerpt: "Pessimistic locking assumes conflicts are frequent and locks records upon retrieval until the transaction finishes. Optimistic locking assumes conflicts are rare, allows uninhibited reads, and validates version numbers or timestamps at commit time, rolling back if a collision occurred."
+        score: 5
+        evidence_quote: "Pessimistic locking assumes conflicts are frequent and locks records upon retrieval... Optimistic locking assumes conflicts are rare, allows uninhibited reads, and validates version numbers or timestamps at commit time"
+        rationale: "Precisely distinguishes both mechanisms, explains locking triggers, commit-time validation, and collision resolution."
+
+  depth_completeness:
+    name: "Depth and Completeness"
+    description: "Evaluates the analytical depth, concrete trade-offs, edge cases, implementation specifics, and rationale backing the statements."
+    anchors:
+      1: "Purely superficial buzzwords or single-phrase answers. No underlying reasoning, trade-offs, metrics, or concrete details provided."
+      2: "Mentions basic concepts but lacks substance. States what was done or known without explaining how, why, or what alternatives were considered."
+      3: "Substantive response. Explains the mechanism or rationale with at least one concrete trade-off or implementation detail. Sufficient for a standard operational scenario."
+      4: "Thorough explanation with clear trade-off analysis. Details edge cases, operational bottlenecks, or multi-faceted considerations."
+      5: "Deep, rigorous analysis with nuanced trade-off evaluation. Discusses second-order effects, failure modes, scale boundaries, and alternative approaches with quantitative or architectural specificity."
+    training_examples:
+      - question: "Why would you choose PostgreSQL over MongoDB for a financial ledger application?"
+        answer_excerpt: "Postgres is better and more popular, and Mongo is NoSQL which isn't good for banks."
+        score: 1
+        evidence_quote: "Postgres is better and more popular, and Mongo is NoSQL"
+        rationale: "Superficial opinion without technical depth, omitting ACID guarantees, transaction isolation, or multi-document atomicity."
+      - question: "Why would you choose PostgreSQL over MongoDB for a financial ledger application?"
+        answer_excerpt: "Ledgers demand strict ACID properties and serializable isolation to prevent phantom reads and double-spend race conditions. PostgreSQL provides robust relational integrity, foreign key constraints, and WAL replication. While MongoDB supports multi-document transactions now, its document model requires careful schema design to avoid write conflicts under high contention."
+        score: 5
+        evidence_quote: "strict ACID properties and serializable isolation to prevent phantom reads and double-spend race conditions... While MongoDB supports multi-document transactions now, its document model requires careful schema design to avoid write conflicts"
+        rationale: "Deeply analyzes transaction isolation levels, relational integrity, write contention, and nuanced trade-offs between both database engines."
+
+  structure_clarity:
+    name: "Structure and Clarity"
+    description: "Evaluates logical progression, organizational coherence, and effective use of structuring frameworks (e.g., STAR: Situation, Task, Action, Result for behavioral answers)."
+    anchors:
+      1: "Disorganized, fragmented train-of-thought. Impossible to discern timeline, cause-and-effect, or candidate's personal responsibility."
+      2: "Loose narrative structure. Lacks clear transitions; jumps between context, action, and results without logical signposting."
+      3: "Coherent progression. Follows a recognizable beginning-middle-end or STAR sequence; clear delineation of candidate's individual role."
+      4: "Well-structured, crisp delivery. Explicit transitions (e.g., 'The initial obstacle was X; my three-stage plan was Y; outcomes were Z'). Minimal rambling."
+      5: "Exemplary structural discipline. Flawlessly applies STAR or thematic categorization; clear separation of context, hypothesis, tactical execution, and quantifiable impact; easy to outline mentally."
+    training_examples:
+      - question: "Tell me about a time an outage occurred on your watch and how you handled it."
+        answer_excerpt: "We had a big bug and customers were mad. Someone called me. We restarted the server. Then later we fixed the code and had coffee. It was stressful."
+        score: 1
+        evidence_quote: "We had a big bug and customers were mad... We restarted the server. Then later we fixed the code"
+        rationale: "Disorganized timeline, no explanation of root cause, monitoring, rollback strategy, or clear division of responsibilities."
+      - question: "Tell me about a time an outage occurred on your watch and how you handled it."
+        answer_excerpt: "In Q2, our payment gateway error rate surged to 18% during peak traffic (Situation). As incident lead, my task was to restore processing within a 15-minute SLA (Task). I initiated a rollback to the previous canary build, rerouted traffic to our secondary provider, and triaged the heap-dump memory leak (Action). We restored 99.98% availability in 11 minutes and instituted mandatory canary burn-in tests preventing future recurrence (Result)."
+        score: 5
+        evidence_quote: "surge to 18% during peak traffic (Situation)... restore processing within a 15-minute SLA (Task)... initiated a rollback to the previous canary build, rerouted traffic (Action)... restored 99.98% availability in 11 minutes (Result)"
+        rationale: "Flawless adherence to STAR structure with distinct milestones, quantitative metrics, and explicit action-to-outcome causality."
+
+  language_use:
+    name: "Language Use"
+    description: "Evaluates professional precision, vocabulary clarity, grammatical coherence, and absence of obstructive colloquialisms or filler noise. Not penalized for regional accents, non-standard dialect variants, or multilingual syntax patterns that preserve communicative intent."
+    anchors:
+      1: "Severely impaired communicative clarity; syntax or ambiguity renders multiple core statements unintelligible."
+      2: "Frequent semantic ambiguity or inappropriate phrasing that requires significant listener inference to understand."
+      3: "Clear, functional professional language. Technical concepts are communicated correctly despite occasional minor phrasing awkwardness or occasional colloquial filler."
+      4: "Articulate, precise technical communication with natural flow and appropriate terminology."
+      5: "Exceptionally articulate, concise, and nuanced professional vocabulary. Explains complex ideas with maximum economy and precision."
+    training_examples:
+      - question: "How do you prioritize competing deadlines?"
+        answer_excerpt: "Like, basically, you know, stuff is crazy all the time, and like, whoever yells loudest gets the thing, sort of."
+        score: 1
+        evidence_quote: "Like, basically, you know, stuff is crazy all the time, and like, whoever yells loudest"
+        rationale: "Excessive filler, informal phrasing, and ambiguous communication that fails professional communication expectations."
+      - question: "How do you prioritize competing deadlines?"
+        answer_excerpt: "I categorize deliverables using an impact-versus-urgency matrix, establish explicit dependency trees with stakeholders, and communicate trade-offs before commitments are compromised."
+        score: 5
+        evidence_quote: "impact-versus-urgency matrix, establish explicit dependency trees with stakeholders, and communicate trade-offs"
+        rationale: "Crisp, concise, highly professional terminology and communicative economy."
+
+  delivery:
+    name: "Delivery"
+    description: "Optional 5th dimension evaluated exclusively when spoken audio is provided. Evaluates speech pacing, hesitation/pauses, vocal modulation, and acoustic confidence. Does NOT penalize accent, dialect, or multilingual phonology."
+    optional: true
+    anchors:
+      1: "Extremely erratic pace, debilitating hesitations, long silence pauses (>5s) that disrupt message flow, or unintelligible volume."
+      2: "Noticeable struggle with pacing; persistent awkward pauses or excessive rushing that diminishes comprehensibility."
+      3: "Functional conversational delivery. Pacing is generally sustainable (110-160 WPM), occasional natural pauses, clear voice modulation."
+      4: "Smooth, confident delivery. Natural cadence, effective rhetorical pauses, and consistent acoustic projection."
+      5: "Captivating, polished cadence. Masterful pacing, natural variation in emphasis, zero disruptive hesitations, projecting poise."
+    training_examples:
+      - question: "Introduce yourself and your technical background."
+        answer_excerpt: "[Audio has 8-second dead pauses between single-word utterances, trailing off inaudibly]"
+        score: 1
+        evidence_quote: "[8-second dead pauses and inaudible trailing off]"
+        rationale: "Delivery cadence completely halts and fails communicative continuity."
+      - question: "Introduce yourself and your technical background."
+        answer_excerpt: "[Steady 135 WPM pacing, clear diction, deliberate 1-second pause before outlining major milestones]"
+        score: 5
+        evidence_quote: "[Steady 135 WPM pacing, intentional transition pauses]"
+        rationale: "Optimal speech rate, professional modulation, and fluent verbal delivery."
